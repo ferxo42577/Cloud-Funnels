@@ -1,0 +1,27 @@
+<?php
+function addToWarriorPlus()
+{
+	if(isset($_POST['WP_ITEM_NAME']))
+	{
+		$secret_keys=explode(',',get_option('warrior_plus_secrets'));
+		for($i=0;$i<count($secret_keys);$i++)
+		{
+			if(strlen($secret_keys[$i])<4){unset($secret_keys[$i]);}
+		}
+		if(in_array($_POST['WP_SECURITYKEY'],$secret_keys))
+		{
+		$data=$_POST;
+		$data['payer_name']=$_POST['WP_BUYER_NAME'];
+		$data['payer_email']=$_POST['WP_BUYER_EMAIL'];
+		$data['payment_id']=$_POST['WP_SALEID'];
+		$_SESSION['total_paid']=$_POST['WP_SALE_AMOUNT'];
+		return json_encode($data);
+		}
+		else
+		{
+			return 0;
+		}
+	}
+}
+
+?>
